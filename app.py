@@ -33,9 +33,6 @@ script_template = PromptTemplate(
 title_memory = ConversationBufferMemory(input_key='topic', memory_key='chat_history')
 script_memory = ConversationBufferMemory(input_key='title', memory_key='chat_history')
 
-# LLMs
-llm = OpenAI(temperature=0.9, openai_api_key=openai_api_key)
-
 # Chains
 title_chain = LLMChain(llm=llm, prompt=title_template, output_key='title', memory=title_memory)
 script_chain = LLMChain(llm=llm, prompt=script_template, output_key='script', memory=script_memory)
@@ -46,7 +43,14 @@ wiki = WikipediaAPIWrapper()
 
 # Show stuff to the screen if there's a prompt
 if prompt:
+    if not openai_api_key:
+        st.warning('Please insert OpenAI API Key. Instructions [here](https://help.openai.com/en/articles/4936850-where-do-i-find-my-secret-api-key)', icon="⚠️")
+        st.stop()
     # response = sequential_chain({'topic': prompt})
+    
+    # LLMs
+    llm = OpenAI(temperature=0.9, openai_api_key=openai_api_key)
+    
     title = title_chain.run(prompt)
     wiki_research = wiki.run(prompt)
     script = script_chain.run(title=title, wikipedia_research=wiki_research)
