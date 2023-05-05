@@ -33,10 +33,6 @@ script_template = PromptTemplate(
 title_memory = ConversationBufferMemory(input_key='topic', memory_key='chat_history')
 script_memory = ConversationBufferMemory(input_key='title', memory_key='chat_history')
 
-# Chains
-title_chain = LLMChain(llm=llm, prompt=title_template, output_key='title', memory=title_memory)
-script_chain = LLMChain(llm=llm, prompt=script_template, output_key='script', memory=script_memory)
-
 # sequential_chain = SequentialChain(chains=[title_chain, script_chain], input_variables=['topic'], output_variables=['title', 'script'])
 
 wiki = WikipediaAPIWrapper()
@@ -50,6 +46,9 @@ if prompt:
     
     # LLMs
     llm = OpenAI(temperature=0.9, openai_api_key=openai_api_key)
+    # Chains
+    title_chain = LLMChain(llm=llm, prompt=title_template, output_key='title', memory=title_memory)
+    script_chain = LLMChain(llm=llm, prompt=script_template, output_key='script', memory=script_memory)
     
     title = title_chain.run(prompt)
     wiki_research = wiki.run(prompt)
