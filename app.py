@@ -8,8 +8,15 @@ from langchain.memory import ConversationBufferMemory
 from langchain.utilities import WikipediaAPIWrapper
 
 # App framework
+st.set_page_config(page_title="YouTube Generator", page_icon=":robot:")
 st.title('🦜🔗 Youtube GPT Creator')
 prompt = st.text_input('Enter the topic you want to create a title and script about')
+
+def get_api_key():
+    input_text = st.text_input(label="OpenAI API Key ",  placeholder="Ex: sk-2twmA8tfCb8un4...", key="openai_api_key_input")
+    return input_text
+
+openai_api_key = get_api_key()
 
 # Prompt templates
 title_template = PromptTemplate(
@@ -27,7 +34,7 @@ title_memory = ConversationBufferMemory(input_key='topic', memory_key='chat_hist
 script_memory = ConversationBufferMemory(input_key='title', memory_key='chat_history')
 
 # LLMs
-llm = OpenAI(temperature=0.9)
+llm = OpenAI(temperature=0.9, openai_api_key=openai_api_key)
 
 # Chains
 title_chain = LLMChain(llm=llm, prompt=title_template, output_key='title', memory=title_memory)
