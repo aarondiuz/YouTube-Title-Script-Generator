@@ -7,8 +7,6 @@ from langchain.chains import LLMChain, SequentialChain
 from langchain.memory import ConversationBufferMemory
 from langchain.utilities import WikipediaAPIWrapper
 
-OpenAI.Config(api_key=os.getenv('OPENAI_API_KEY'))
-
 # App framework
 st.title('🦜🔗 Youtube GPT Creator')
 prompt = st.text_input('Enter the topic you want to create a title and script about')
